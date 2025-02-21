@@ -56,5 +56,5 @@ python scraper.py
 
 ---
 
-🔥 **Made with ❤️ by [Your Name]**  
+🔥 **Made with ❤️ by Khushal Majoka**  
 🚀 Happy Scraping! 🖥️✨
