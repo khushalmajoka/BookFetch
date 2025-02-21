@@ -1,0 +1,12 @@
+{
+    "The Alchemist": {
+        "image_url": "https://m.media-amazon.com/images/I/61HAE8zahLL._AC_UY654_QL65_.jpg",
+        "MRP": "₹399",
+        "Discounted Price": "₹258"
+    },
+    "Harry Potter and the Philosopher's Stone": {
+        "image_url": "https://m.media-amazon.com/images/I/617ejUk8X-L._AC_UY654_QL65_.jpg",
+        "MRP": "₹999",
+        "Discounted Price": "₹365"
+    }
+}
