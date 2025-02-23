@@ -4,16 +4,22 @@ import random
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get API key securely
+API_KEY = os.getenv("SCRAPER_API_KEY")
 
 def get_amazon_image(novel_name):
-    """Fetch high-resolution book cover image from Amazon with delay."""
-    time.sleep(random.uniform(2, 10))  # Introduce delay
+    """Fetch high-resolution book cover image from Amazon with ScraperAPI."""
+    time.sleep(random.uniform(2, 5))  # Reduced delay since ScraperAPI handles rate limits
     search_url = f"https://www.amazon.in/s?k={novel_name.replace(' ', '+')}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0 Safari/537.36"
-    }
-    
-    response = requests.get(search_url, headers=headers)
+    scraper_url = f"http://api.scraperapi.com/?api_key={API_KEY}&url={search_url}"
+
+    response = requests.get(scraper_url)
     if response.status_code != 200:
         print(f"Amazon request failed: {response.status_code}")
         return None
@@ -31,14 +37,12 @@ def get_amazon_image(novel_name):
     return None
 
 def get_amazon_price(novel_name):
-    """Fetch book price and MRP from Amazon India with delay."""
-    time.sleep(random.uniform(2, 10))  # Introduce delay
+    """Fetch book price and MRP from Amazon India using ScraperAPI."""
+    time.sleep(random.uniform(2, 5))  # Reduced delay
     search_url = f"https://www.amazon.in/s?k={novel_name.replace(' ', '+')}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0 Safari/537.36"
-    }
-    
-    response = requests.get(search_url, headers=headers)
+    scraper_url = f"http://api.scraperapi.com/?api_key={API_KEY}&url={search_url}"
+
+    response = requests.get(scraper_url)
     if response.status_code != 200:
         print(f"Amazon request failed: {response.status_code}")
         return {"MRP": "Not found", "Discounted Price": "Not found"}
