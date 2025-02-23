@@ -1,10 +1,13 @@
 import json
+import time
+import random
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
 def get_amazon_image(novel_name):
-    """Fetch high-resolution book cover image from Amazon."""
+    """Fetch high-resolution book cover image from Amazon with delay."""
+    time.sleep(random.uniform(2, 10))  # Introduce delay
     search_url = f"https://www.amazon.in/s?k={novel_name.replace(' ', '+')}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0 Safari/537.36"
@@ -28,7 +31,8 @@ def get_amazon_image(novel_name):
     return None
 
 def get_amazon_price(novel_name):
-    """Fetch book price and MRP from Amazon India."""
+    """Fetch book price and MRP from Amazon India with delay."""
+    time.sleep(random.uniform(2, 10))  # Introduce delay
     search_url = f"https://www.amazon.in/s?k={novel_name.replace(' ', '+')}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0 Safari/537.36"
@@ -50,10 +54,10 @@ def get_amazon_price(novel_name):
     return {"MRP": mrp, "Discounted Price": discounted_price}
 
 def fetch_novel_data(novel_list, file_path, start_row):
-    """Fetch image, MRP, and discounted price for a list of novels and update Excel file."""
+    """Fetch image, MRP, and discounted price for novels and update Excel file."""
     results = {}
-    df = pd.read_excel(file_path)  # Read existing Excel file
-    
+    df = pd.read_excel(file_path, header=None)  # Read entire Excel sheet
+
     for index, novel in enumerate(novel_list):
         row_index = start_row - 1 + index  # Calculate Excel row index
         print(f"Fetching data for: {novel}")
@@ -67,7 +71,7 @@ def fetch_novel_data(novel_list, file_path, start_row):
             "Discounted Price": price_data["Discounted Price"]
         }
 
-        # Update the Excel DataFrame
+        # Update DataFrame without modifying first column (Book Name)
         df.at[row_index, 1] = price_data["Discounted Price"]  # Column B
         df.at[row_index, 2] = price_data["MRP"]  # Column C
         df.at[row_index, 3] = image_url  # Column D
@@ -76,14 +80,14 @@ def fetch_novel_data(novel_list, file_path, start_row):
     with open("output.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
 
-    # Write back to the Excel file
+    # Write back to the Excel file without modifying Book Names
     df.to_excel(file_path, index=False, header=False)
 
     print("✅ Data saved to output.json and updated in BookSheet.xlsx")
     return results
 
 def read_books_from_excel(file_path, start_row, num_rows):
-    """Read book names from an Excel sheet."""
+    """Read book names from an Excel sheet without modifying the first column."""
     df = pd.read_excel(file_path, usecols=[0], skiprows=start_row - 1, nrows=num_rows, header=None)
     return df[0].dropna().tolist()
 
